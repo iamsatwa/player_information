@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+/* style the container */
+.container {
+  position: relative;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px 0 30px 0;
+}
+/* style inputs and link buttons */
+input,
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  margin: 5px 0;
+  opacity: 0.85;
+  display: inline-block;
+  font-size: 17px;
+  line-height: 20px;
+  text-decoration: none; /* remove underline from anchors */
+}
+input:hover,
+.btn:hover {
+  opacity: 1;
+}
+/* add appropriate colors to fb, twitter and google buttons */
+.fb {
+  background-color: #3B5998;
+  color: white;
+}
+.twitter {
+  background-color: #55ACEE;
+  color: white;
+}
+.google {
+  background-color: #dd4b39;
+  color: white;
+}
+/* style the submit button */
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+/* Two-column layout */
+.col {
+  float: left;
+  width: 50%;
+  margin: auto;
+  padding: 0 50px;
+  margin-top: 6px;
+}
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+/* vertical line */
+.vl {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  border: 2px solid #ddd;
+  height: 175px;
+}
+/* text inside the vertical line */
+.vl-innertext {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  padding: 8px 10px;
+}
+/* hide some text on medium and large screens */
+.hide-md-lg {
+  display: none;
+}
+/* bottom container */
+.bottom-container {
+  text-align: center;
+  background-color: #666;
+  border-radius: 0px 0px 4px 4px;
+}
+/* Responsive layout - when the screen is less than 650px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 650px) {
+  .col {
+    width: 100%;
+    margin-top: 0;
+  }
+  /* hide the vertical line */
+  .vl {
+    display: none;
+  }
+  /* show the hidden text on small screens */
+  .hide-md-lg {
+    display: block;
+    text-align: center;
+  }
+}
+#team {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+#team td, #team th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+#team tr:nth-child(even){background-color: #f2f2f2;}
+#team tr:hover {background-color: #ddd;}
+#team th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+/**/
+@padding-large-vertical: 10px;
+@padding-base-vertical: 6px;
+@font-size-h3: 24px;
+.dropmenu-item-btn {
+  text-align: center;
+  // Unfortunate cascade in Bootstrap
+  .dropdown-menu > li > & {
+    padding: @padding-large-vertical;
+    
+    &:hover,
+    &:focus,
+    &:active {
+      color: darken(#428bca, 6.5%);
+    }
+  }
+  > .glyphicon {
+    display: block;
+    font-size: @font-size-h3; // 24px
+    margin-bottom: @padding-base-vertical;
+  }
+}
+.open > .dropdown-menu--horizontal {
+  display: flex;
+  
+  > li > a {
+    min-width: 0px;
+  }
+  > .divider {
+    width: 1px;
+    height: auto;
+    margin: 0 9px;
+  }
+}
+/**/
+</style>
+</head>
+<body>
+<!--<form action="http://localhost:5000/login" method="GET">-->
+<div style="float:right">
+<a href="javascript:history.go(-1)" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-log-out" ></span> Log out
+        </a>
+</div>
+<h2>Add Team/Player </h2>
+  <div class="container">
+  <form action="http://localhost:5000/teamplayer" method="POST">
+    <div class="row">
+      <div class="col">
+        <input type="submit" name = "add_template" value="Add Team" action="add_team_player">
+          <input type="submit" name = "add_template" value="Add Player" action="add_team_player">
+      </div>
+      <div class="col">
+        <input type="submit" name = "add_template" value="View Players" action="view_players">
+      </div>
+    </div>
+  </form>
+</div>
+{% if teams %}
+<table id="team" >
+  <tr>
+    <th>Team Name</th>
+    <th>Team Logo</th>
+    <th>Action</th>
+  </tr>
+  {% for each in teams %}
+  <tr>
+    <td> {{each.team_name}} </td>
+    <td></td>
+    <td>
+    <div class="dropdown open">
+  <ul class="dropdown-menu--horizontal">
+      <a class="dropmenu-item-btn" href="{{ url_for('team_edit', team_id=each.team_id) }}">
+        <i class="glyphicon glyphicon-pencil"></i>
+        Edit
+      </a>
+      <a class="dropmenu-item-btn" href="{{ url_for('delete_team', team_id=each.team_id) }}">
+        <i class="glyphicon glyphicon-trash"></i>
+        Delete
+      </a>
+  </ul>
+</div>
+</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+</body>
+</html>
