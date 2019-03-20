@@ -128,7 +128,7 @@ input[type=submit]:hover {
 {% endwith %}
 <h2>Edit Team Information </h2>
   <div class="container">
-  <form action="/update_team" method="POST">
+  <form action="/update_team" method="POST" enctype="multipart/form-data">
     <div class="row">
       <div class="col">
         <input type="text" name="team_id" placeholder="Team Name" value={{team.team_id}} style="visibility: hidden">
@@ -136,7 +136,14 @@ input[type=submit]:hover {
            <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-btn">
-                        Upload Photo <input type="file" id="fileupload" name="file" multiple>
+                        <img src="data:;base64,{{ team.team_image }}"/>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        Change Logo <input type="file" id="fileupload" name="teamImage" multiple>
                     </span>
                 </div>
 
@@ -147,6 +154,5 @@ input[type=submit]:hover {
     </div>
   </form>
 </div>
-
 </body>
 </html>
