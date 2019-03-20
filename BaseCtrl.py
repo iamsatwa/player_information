@@ -2,6 +2,7 @@ from flask import Flask, flash, redirect, render_template, request
 import os
 from flask_sqlalchemy import SQLAlchemy
 import json
+from base64 import b64encode
 
 app = Flask(__name__)
 
@@ -28,6 +29,7 @@ class Player(db.Model):
     player_id = db.Column(db.Integer, primary_key=True)
     player_fname = db.Column(db.String(80))
     player_lname = db.Column(db.String(80))
+    player_image = db.Column(db.LargeBinary)
     team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
 
     def __repr__(self):
@@ -72,9 +74,10 @@ def add_team():
     """This method used for create player record"""
     if request.method == 'POST':
         result = request.form
+        teamImage = request.files['teamImage'].read()
         team = Team.query.filter_by(team_name=result['team_name']).first()
         if not team:
-            team1 = Team(team_name=result['team_name'])
+            team1 = Team(team_name=result['team_name'], team_image=teamImage)
             db.session.add(team1)
             db.session.commit()
             flash(result['team_name'] + ' is added successfully')
@@ -90,7 +93,12 @@ def player_information():
     """This method used for display team player details"""
     if request.method == 'POST':
         result = request.form
-        player = Player(player_fname=result['player_first_name'], player_lname=result['player_last_name'], team_id=result['team_selected'])
+        if request.files:
+            playerImage = request.files['playerImage'].read()
+        else:
+            playerImage = None
+        player = Player(player_image=playerImage, player_fname=result['player_first_name'],
+                        player_lname=result['player_last_name'], team_id=result['team_selected'])
         db.session.add(player)
         db.session.commit()
         teams = get_team()
@@ -103,6 +111,9 @@ def player_information():
 def get_team():
     """This method used for get all team information"""
     teams = Team.query.all()
+    for each in teams:
+        if each.team_image is not None:
+            each.team_image = b64encode(each.team_image)
     return teams
 
 
@@ -119,8 +130,10 @@ def updateteam():
     """This method used for update team information"""
     if request.method == 'POST':
         result = request.form
+        teamImage = request.files['teamImage'].read()
         team = Team.query.filter_by(team_id=result.get('team_id')).one()
         team.team_name = result.get('team_name')
+        team.team_image = teamImage
         db.session.commit()
         teams = get_team()
         if teams:
@@ -159,7 +172,6 @@ def delete_player(player_id):
     if request.method == 'GET':
         Player.query.filter_by(player_id=player_id).delete()
         db.session.commit()
-        result_dict = {}
         return getAllPlayers()
 
 
@@ -167,8 +179,10 @@ def getAllPlayers():
     """This method pull all player information from player table"""
     result_dict = {}
     teams = get_team()
-    players = Player.query.join(Team, Player.team_id==Team.team_id).\
-    add_columns(Player.player_fname,Player.player_lname,Team.team_name,Player.player_id)
+    players = db.session.query(Player, Team).join(Team, Player.team_id == Team.team_id)
+    for each in players:
+        if each.Player.player_image is not None:
+            each.Player.player_image = b64encode(each.Player.player_image)
     result_dict['teams'] = teams
     result_dict['players']= players
     return render_template('viewplayers.html', result=result_dict)
@@ -180,6 +194,7 @@ def player_edit(player_id):
     if request.method == 'GET':
         result = {}
         player = Player.query.filter_by(player_id=player_id).one()
+        player.player_image = b64encode(player.player_image)
         teams = get_team()
         result['player'] = player
         result['teams'] = teams
@@ -188,15 +203,16 @@ def player_edit(player_id):
 
 @app.route('/update_player', methods=['POST', 'GET'])
 def updateplayer():
-    """This method used for update player information """
     if request.method == 'POST':
         result = request.form
         player = Player.query.filter_by(player_id=result.get('player_id')).one()
         player.player_fname = result.get('player_fname')
         player.player_lname = result.get('player_lname')
         player.team_id = result.get('team_selected')
+        if request.files:
+            player.player_image = request.files['playerImage'].read()
         db.session.commit()
-        return getAllPlayers()
+    return getAllPlayers()
 
 
 @app.route('/getAllTeamInfo', methods=['POST', 'GET'])
@@ -243,8 +259,10 @@ def display_read_only_user():
     if request.method == 'GET':
         result_dict = {}
         teams = get_team()
-        players = Player.query.join(Team, Player.team_id == Team.team_id). \
-            add_columns(Player.player_fname, Player.player_lname, Team.team_name, Player.player_id)
+        players = db.session.query(Player, Team).join(Team, Player.team_id == Team.team_id)
+        for each in players:
+            if each.Player.player_image is not None:
+                each.Player.player_image = b64encode(each.Player.player_image)
         result_dict['teams'] = teams
         result_dict['players'] = players
         return render_template('team_player_detail.html', result=result_dict)
