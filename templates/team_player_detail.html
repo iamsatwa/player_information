@@ -252,11 +252,6 @@ input[type=submit]:hover {
       {% endfor %}
    {% endif %}
 {% endwith %}
-<div style="float:right">
-<a href="javascript:history.go(-1)" class="btn btn-default btn-sm">
-          <span class="fa fa-arrow-left" ></span> Back
-        </a>
-</div>
 <h2>Players Information </h2>
 <select name="team_selected" id="selectedTeam" class="styled-select slate" onchange="displayteams()">
   {% for each in result.teams %}
