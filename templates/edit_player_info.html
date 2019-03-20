@@ -128,14 +128,14 @@ input[type=submit]:hover {
 {% endwith %}
 <h2>Edit Player Information </h2>
   <div class="container">
-  <form action="/update_player" method="POST">
+  <form action="/update_player" method="POST" enctype="multipart/form-data">
     <div class="row">
       <div class="col">
         <input type="text" name="player_id" placeholder="Player Name" value={{results.player.player_id}} style="visibility: hidden">
         <input type="text" name="player_fname" placeholder="Player Name" value={{results.player.player_fname}}>
         <input type="text" name="player_lname" placeholder="Player Name" value={{results.player.player_lname}}>
         <div class="input-group">
-        <span class="input-group-addon">Please select</span>
+        <span class="input-group-addon">Please select to change team</span>
             <select name="team_selected" class="styled-select slate">
               {% for each in results.teams %}
               <option value="{{each.team_id }}" {% if each.team_id==results.player.team_id %} selected="selected"{% endif %}>{{ each.team_name }}</option>
@@ -145,7 +145,15 @@ input[type=submit]:hover {
            <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-btn">
-                        Upload Photo <input type="file" id="fileupload" name="file" multiple>
+                        <img src="data:;base64,{{ results.player.player_image }}"/>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        Change Image <input type="file" id="fileupload" name="playerImage" multiple>
                     </span>
                 </div>
 
@@ -156,6 +164,5 @@ input[type=submit]:hover {
     </div>
   </form>
 </div>
-
 </body>
 </html>
