@@ -128,14 +128,14 @@ input[type=submit]:hover {
 {% endwith %}
 <h2>Add Team Information </h2>
   <div class="container">
-  <form action="/addteam" method="POST">
+  <form action="/addteam" method="POST" enctype="multipart/form-data">
     <div class="row">
       <div class="col">
         <input type="text" name="team_name" placeholder="Team Name" required>
            <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-btn">
-                        Upload Photo <input type="file" id="fileupload" name="file" multiple>
+                        Upload Photo <input type="file" id="fileupload" name="teamImage" multiple>
                     </span>
                 </div>
 
@@ -146,6 +146,5 @@ input[type=submit]:hover {
     </div>
   </form>
 </div>
-
 </body>
 </html>
