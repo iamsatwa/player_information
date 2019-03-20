@@ -244,7 +244,7 @@ input[type=submit]:hover {
 </script>
 </head>
 <body>
-
+<!--<form action="http://localhost:5000/login" method="GET">-->
 {% with messages = get_flashed_messages() %}
    {% if messages %}
       {% for message in messages %}
@@ -252,8 +252,12 @@ input[type=submit]:hover {
       {% endfor %}
    {% endif %}
 {% endwith %}
+<div style="float:right">
+<a href="javascript:history.go(-1)" class="btn btn-default btn-sm">
+          <span class="fa fa-arrow-left" ></span> Back
+        </a>
+</div>
 <h2>Players Information </h2>
-<form action="/playersDetails" method="GET">
 <select name="team_selected" id="selectedTeam" class="styled-select slate" onchange="displayteams()">
   {% for each in result.teams %}
   <option value="{{each.team_id }}">{{ each.team_name }}</option>
@@ -266,16 +270,17 @@ input[type=submit]:hover {
     <th>Player First Name</th>
     <th>Player Last Name</th>
     <th>Player Team</th>
+    <th>Team logo</th>
   </tr>
   {% for each in result.players %}
   <tr>
-    <td> {{each.player_fname}} </td>
-    <td>{{each.player_lname}} </td>
-    <td>{{each.team_name}} </td>
+    <td> {{each.Player.player_fname}} </td>
+    <td>{{each.Player.player_lname}} </td>
+    <td><img src="data:;base64,{{ each.Player.player_image }}" style="width:128px;height:128px;"/></td>
+    <td><img src="data:;base64,{{ each.Team.team_image }}" style="width:128px;height:128px;"/></td>
   </tr>
   {% endfor %}
 </table>
 {% endif %}
-
 </body>
 </html>
