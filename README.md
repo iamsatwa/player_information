@@ -12,3 +12,6 @@ http://127.0.0.1:5000/getPlayersInfo/passTeamName
 Ex:http://127.0.0.1:5000/getPlayersInfo/CSK
 
 Return all player information which is associated a particual team
+
+Readonly user:
+http://localhost:5000/playersDetails
