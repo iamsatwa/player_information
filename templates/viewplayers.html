@@ -270,21 +270,23 @@ input[type=submit]:hover {
     <th>Player First Name</th>
     <th>Player Last Name</th>
     <th>Player Team</th>
+    <th>Team logo</th>
     <th>Action </th>
   </tr>
   {% for each in result.players %}
   <tr>
-    <td> {{each.player_fname}} </td>
-    <td>{{each.player_lname}} </td>
-    <td>{{each.team_name}} </td>
+    <td> {{each.Player.player_fname}} </td>
+    <td>{{each.Player.player_lname}} </td>
+    <td><img src="data:;base64,{{ each.Player.player_image }}" style="width:128px;height:128px;"/></td>
+    <td><img src="data:;base64,{{ each.Team.team_image }}" style="width:128px;height:128px;"/></td>
     <td>
     <div class="dropdown open">
   <ul class="dropdown-menu--horizontal">
-      <a class="dropmenu-item-btn" href="{{ url_for('player_edit', player_id=each.player_id) }}">
+      <a class="dropmenu-item-btn" href="{{ url_for('player_edit', player_id=each.Player.player_id) }}">
         <i class="glyphicon glyphicon-pencil"></i>
         Edit
       </a>
-      <a class="dropmenu-item-btn" href="{{ url_for('delete_player', player_id=each.player_id) }}">
+      <a class="dropmenu-item-btn" href="{{ url_for('delete_player', player_id=each.Player.player_id) }}">
         <i class="glyphicon glyphicon-trash"></i>
         Delete
       </a>
@@ -295,6 +297,5 @@ input[type=submit]:hover {
   {% endfor %}
 </table>
 {% endif %}
-
 </body>
 </html>
