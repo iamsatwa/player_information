@@ -173,18 +173,13 @@ input[type=submit]:hover {
 </head>
 <body>
 <!--<form action="http://localhost:5000/login" method="GET">-->
-<div style="float:right">
-<a href="javascript:history.go(-1)" class="btn btn-default btn-sm">
-          <span class="glyphicon glyphicon-log-out" ></span> Log out
-        </a>
-</div>
 <h2>Add Team/Player </h2>
   <div class="container">
-  <form action="http://localhost:5000/teamplayer" method="POST">
+  <form action="http://localhost:5000/teamplayer" method="POST" enctype="multipart/form-data">
     <div class="row">
       <div class="col">
         <input type="submit" name = "add_template" value="Add Team" action="add_team_player">
-          <input type="submit" name = "add_template" value="Add Player" action="add_team_player">
+          <input type="submit" name = "add_template" value="Add Player" action="add_player">
       </div>
       <div class="col">
         <input type="submit" name = "add_template" value="View Players" action="view_players">
@@ -202,7 +197,7 @@ input[type=submit]:hover {
   {% for each in teams %}
   <tr>
     <td> {{each.team_name}} </td>
-    <td></td>
+    <td><img src="data:;base64,{{ each.team_image }}" style="width:128px;height:128px;"/></td>
     <td>
     <div class="dropdown open">
   <ul class="dropdown-menu--horizontal">
