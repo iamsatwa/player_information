@@ -126,7 +126,7 @@ styled-select.slate {
 <!--<form action="http://localhost:5000/login" method="GET">-->
 <h2>Add Player Information </h2>
   <div class="container">
-  <form action="/player_information" method="POST">
+  <form action="/player_information" method="POST" enctype="multipart/form-data">
     <div class="row">
       <div class="col">
         <input type="text" name="player_first_name" placeholder="Player First Name" required>
@@ -134,7 +134,7 @@ styled-select.slate {
            <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-btn">
-                        Upload Photo <input type="file" id="fileupload" name="file" multiple>
+                        Upload Photo <input type="file" id="fileupload" name="playerImage" multiple>
                     </span>
                 </div>
 
@@ -153,6 +153,5 @@ styled-select.slate {
     </div>
   </form>
 </div>
-
 </body>
 </html>
